@@ -28,7 +28,7 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener{
     	
     }
     void updateGameState() {
-    	
+    	rocket.updateRocket();
     }
     void updateEndState() {
     	
@@ -92,22 +92,39 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener{
 		if(currentState == GAME) {
 			if (arg0.getKeyCode()==KeyEvent.VK_UP) {
 			    System.out.println("UP");
+			    rocket.isMovingUp = true;
 			}
 			if (arg0.getKeyCode()==KeyEvent.VK_DOWN) {
 			    System.out.println("DOWN");
+			    rocket.isMovingDown = true;
 			}
 			if (arg0.getKeyCode()==KeyEvent.VK_LEFT) {
 			    System.out.println("LEFT");
+			    rocket.isMovingLeft = true;
 			}
 			if (arg0.getKeyCode()==KeyEvent.VK_RIGHT) {
 			    System.out.println("RIGHT");
+			    rocket.isMovingRight = true;
 			}
 		}
 	}
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
+		if(currentState == GAME) {
+			if (arg0.getKeyCode()==KeyEvent.VK_UP) {
+			    rocket.isMovingUp = false;
+			}
+			if (arg0.getKeyCode()==KeyEvent.VK_DOWN) {
+			    rocket.isMovingDown = false;
+			}
+			if (arg0.getKeyCode()==KeyEvent.VK_LEFT) {
+			    rocket.isMovingLeft = false;
+			}
+			if (arg0.getKeyCode()==KeyEvent.VK_RIGHT) {
+			    rocket.isMovingRight = false;
+			}
+		}
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {
