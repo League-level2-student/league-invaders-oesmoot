@@ -53,5 +53,11 @@ public void purgeObjects() {
 			iterA.remove();
 		}
 	}
+	while(iterP.hasNext()) {
+		Projectile p = iterP.next();
+		if(!p.isActive) {
+			iterP.remove();
+		}
+	}
 }
 }
