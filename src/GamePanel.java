@@ -19,11 +19,13 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener{
     Font titleFont;
     Font enterFont;
     Timer frameDraw;
+    Timer alienSpawn;
     RocketShip rocket = new RocketShip(250,700,50,50);
     ObjectManager objMan = new ObjectManager(rocket);
     public static BufferedImage image;
     public static boolean needImage = true;
     public static boolean gotImage = false;	
+    boolean hasStarted = false;
     GamePanel() {
     	titleFont = new Font("Arial",Font.PLAIN,48);
     	enterFont = new Font("Arial",Font.PLAIN,20);
@@ -39,6 +41,9 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener{
     void updateGameState() {
     	rocket.updateRocket();
     	objMan.update();
+    	if(!rocket.isActive) {
+    		currentState = END;
+    	}
     }
     void updateEndState() {
     	
@@ -54,6 +59,15 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener{
             needImage = false;
         }
     }
+    
+    public void startGame() {
+    	if(!hasStarted) {
+    		alienSpawn = new Timer(1000 , objMan);
+    		hasStarted = true;
+    	}
+        alienSpawn.start();
+    }
+    
     void drawMenuState(Graphics g) {
     	g.setColor(Color.BLUE);
     	g.fillRect(0, 0, LeagueInvaders.WIDTH, LeagueInvaders.HEIGHT);
@@ -110,6 +124,20 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener{
 		    } else {
 		        currentState++;
 		    }
+		    if(currentState == GAME) {
+		    	
+		    	startGame();
+		    	rocket.x = 200;
+		    	rocket.y = 700;
+		    	rocket.isActive = true;
+		    	rocket.isMovingDown = false;
+		    	rocket.isMovingLeft = false;
+		    	rocket.isMovingRight = false;
+		    	rocket.isMovingUp = false;
+		    }
+		    if (currentState == END) {
+		    	alienSpawn.stop();
+		    }
 		}
 		if(currentState == GAME) {
 			if (arg0.getKeyCode()==KeyEvent.VK_UP) {
@@ -127,6 +155,9 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener{
 			if (arg0.getKeyCode()==KeyEvent.VK_RIGHT) {
 			    System.out.println("RIGHT");
 			    rocket.isMovingRight = true;
+			}
+			if (arg0.getKeyCode() == KeyEvent.VK_SPACE) {
+				objMan.addProjectile(rocket.getProjectile());
 			}
 		}
 	}

@@ -29,6 +29,10 @@ public static boolean gotImage = false;
 		}
 	}
 	
+	public Projectile getProjectile() {
+        return new Projectile(x+width/2, y, 10, 30);
+} 
+	
 	void updateRocket() {
 		if(isMovingUp) {
 			if(y> (-50)) {
@@ -50,6 +54,8 @@ public static boolean gotImage = false;
 				right();
 		    }
 		}
+		
+		super.update();
 	}
 	void loadImage(String imageFile) {
 	    if (needImage) {

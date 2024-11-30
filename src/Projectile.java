@@ -12,7 +12,7 @@ public class Projectile extends GameObject {
 		super(x, y, width, height);
 		speed = 10;
 		if (needImage) {
-		    loadImage ("rocket.png");
+		    loadImage ("invaderProj.png");
 		}
 		// TODO Auto-generated constructor stub
 	}
@@ -30,6 +30,7 @@ public class Projectile extends GameObject {
 
 	public void update() {
 		y-=speed;
+		super.update();
 	}
 	
 	public void draw(Graphics g) {
