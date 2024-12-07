@@ -9,9 +9,18 @@ boolean isMovingUp = false;
 boolean isMovingDown = false;
 boolean isMovingLeft = false;
 boolean isMovingRight = false;
+boolean isShooting = false;
 public static BufferedImage image;
 public static boolean needImage = true;
 public static boolean gotImage = false;	
+int maxAmmo = 50;
+int ammo = maxAmmo;
+ObjectManager objMan;
+
+
+	public void setObjMan(ObjectManager objMan) {
+	this.objMan = objMan;
+}
 	RocketShip(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		speed = 10;
@@ -53,6 +62,17 @@ public static boolean gotImage = false;
 			if(x<500) {
 				right();
 		    }
+		}
+		if(isShooting) {
+			if(ammo>=1) {
+				objMan.addProjectile(getProjectile());
+				ammo--;
+			}
+		}
+		else {
+			if(ammo<maxAmmo) {
+				ammo+=5;
+			}
 		}
 		
 		super.update();

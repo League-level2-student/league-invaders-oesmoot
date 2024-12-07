@@ -21,12 +21,13 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener{
     Timer frameDraw;
     Timer alienSpawn;
     RocketShip rocket = new RocketShip(250,700,50,50);
-    ObjectManager objMan = new ObjectManager(rocket);
+	ObjectManager objMan = new ObjectManager(rocket);
     public static BufferedImage image;
     public static boolean needImage = true;
     public static boolean gotImage = false;	
     boolean hasStarted = false;
     GamePanel() {
+    	rocket.setObjMan(objMan);
     	titleFont = new Font("Arial",Font.PLAIN,48);
     	enterFont = new Font("Arial",Font.PLAIN,20);
     	frameDraw = new Timer(1000/60, this);
@@ -62,7 +63,7 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener{
     
     public void startGame() {
     	if(!hasStarted) {
-    		alienSpawn = new Timer(1000 , objMan);
+    		alienSpawn = new Timer(objMan.spawnSpeed , objMan);
     		hasStarted = true;
     	}
         alienSpawn.start();
@@ -83,6 +84,10 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener{
     		g.drawImage(image, 0,0, null);
     	}
     	objMan.draw(g);
+    	g.setFont(enterFont);
+    	g.drawString("score: " + String.valueOf(objMan.score), 5, 15);
+    	g.drawString("ammo: " + String.valueOf(rocket.ammo), 150, 15);
+    	alienSpawn.setDelay(objMan.spawnSpeed);
     }
     void drawEndState(Graphics g) {
     	g.setColor(Color.RED);
@@ -134,6 +139,10 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener{
 		    	rocket.isMovingLeft = false;
 		    	rocket.isMovingRight = false;
 		    	rocket.isMovingUp = false;
+		    	rocket.isShooting = false; 
+		    	objMan.spawnSpeed = 1000;
+		    	objMan.projectiles.clear();
+		    	objMan.aliens.clear();
 		    }
 		    if (currentState == END) {
 		    	alienSpawn.stop();
@@ -157,7 +166,7 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener{
 			    rocket.isMovingRight = true;
 			}
 			if (arg0.getKeyCode() == KeyEvent.VK_SPACE) {
-				objMan.addProjectile(rocket.getProjectile());
+				rocket.isShooting = true;
 			}
 		}
 	}
@@ -176,6 +185,9 @@ public class GamePanel extends JPanel implements ActionListener,KeyListener{
 			}
 			if (arg0.getKeyCode()==KeyEvent.VK_RIGHT) {
 			    rocket.isMovingRight = false;
+			}
+			if (arg0.getKeyCode() == KeyEvent.VK_SPACE) {
+				rocket.isShooting = false;
 			}
 		}
 	}

@@ -10,6 +10,8 @@ RocketShip rocket;
 ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 ArrayList<Alien> aliens = new ArrayList<Alien>();
 Random ran = new Random();
+int score = 0;
+int spawnSpeed = 1000;
 //Iterator<Alien> iterA = aliens.iterator();
 //Iterator<Projectile> iterP = projectiles.iterator();
 ObjectManager(RocketShip rocket){
@@ -25,11 +27,19 @@ public void checkCollision() {
 		if(rocket.collisionBox.intersects(a.collisionBox)){
 			rocket.isActive = false;
 			a.isActive = false;
+			score = 0;
 		}
 		for(Projectile p: projectiles) {
 			if(p.collisionBox.intersects(a.collisionBox)) {
 				a.isActive = false;
-				p.isActive = false;
+				//p.isActive = false;
+				score++;
+				if(spawnSpeed>=10) {
+					spawnSpeed-=10;
+				}
+				rocket.maxAmmo+=10;
+				
+				
 			}
 		}
 	}
