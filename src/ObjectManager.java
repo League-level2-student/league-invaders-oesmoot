@@ -1,9 +1,12 @@
+import java.applet.AudioClip;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
+
+import javax.swing.JApplet;
 
 public class ObjectManager implements ActionListener {
 RocketShip rocket;
@@ -12,10 +15,19 @@ ArrayList<Alien> aliens = new ArrayList<Alien>();
 Random ran = new Random();
 int score = 0;
 int spawnSpeed = 1000;
+String soundFileAlienDeath = "ps2_start_up.wav";
+String soundFilePlayerDeath = "lego-yoda-death-sound-effect.wav";
+String soundFileProjectile = "big-explosion-41783.wav";
+AudioClip alienDeathClip;
+AudioClip playerDeathClip;
+AudioClip projectileClip;
 //Iterator<Alien> iterA = aliens.iterator();
 //Iterator<Projectile> iterP = projectiles.iterator();
 ObjectManager(RocketShip rocket){
 	this.rocket = rocket;
+	alienDeathClip = JApplet.newAudioClip(getClass().getResource(soundFileAlienDeath));
+	playerDeathClip = JApplet.newAudioClip(getClass().getResource(soundFilePlayerDeath));
+	projectileClip = JApplet.newAudioClip(getClass().getResource(soundFileProjectile));
 }
 
 public void addProjectile(Projectile projectile) {
@@ -28,12 +40,14 @@ public void checkCollision() {
 			rocket.isActive = false;
 			a.isActive = false;
 			score = 0;
+			playerDeathClip.play();
 		}
 		for(Projectile p: projectiles) {
 			if(p.collisionBox.intersects(a.collisionBox)) {
 				a.isActive = false;
 				//p.isActive = false;
 				score++;
+				alienDeathClip.play();
 				if(spawnSpeed>=10) {
 					spawnSpeed-=10;
 				}
